@@ -17,6 +17,8 @@ import sg.edu.np.mad.excersise5.R;
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = new Intent(this, Listactivity.class);
+        startActivity(intent);
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);

@@ -12,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
+import java.util.ArrayList;
+
 import sg.edu.np.mad.excersise5.R;
 
 public class Listactivity extends AppCompatActivity {
@@ -19,6 +21,8 @@ public class Listactivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         MYDBHandler db = new MYDBHandler(this);
+        ArrayList<User> userlist = db.getUsers();
+        User user =userlist.get(1);
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_listactivity);
@@ -31,7 +35,13 @@ public class Listactivity extends AppCompatActivity {
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                db.updateUser(user);
+                boolean yes = user.isFollowed();
+                if (yes) {
+                    follow.setText("Unfollow");
+                } else {
+                    follow.setText("Follow");
+                }
             }
         });
 

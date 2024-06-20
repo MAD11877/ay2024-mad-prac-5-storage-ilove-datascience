@@ -16,7 +16,7 @@
             android:name="sg.edu.np.mad.madpractical5.Listactivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="sg.edu.np.mad.madpractical5.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

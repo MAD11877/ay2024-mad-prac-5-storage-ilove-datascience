@@ -71,4 +71,52 @@ public class MYDBHandler extends SQLiteOpenHelper{
         }
 
     }
+    public void updateUser(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, user.getName());
+        values.put(COLUMN_DESCRIPTION, user.getDescription());
+        values.put(COLUMN_FOLLOWED, user.isFollowed() ? 1 : 0);
+
+        db.update(TABLE_USERS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(user.getId())});
+        db.close();
+    }
+    public ArrayList<User> getUsers() {
+        ArrayList<User> userList = new ArrayList<>();
+        String query = "SELECT * FROM " + TABLE_USERS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null) {
+            try {
+                // Loop through the cursor and add each user to the list
+                while (cursor.moveToNext()) {
+                    int idIndex = cursor.getColumnIndex(COLUMN_ID);
+                    int nameIndex = cursor.getColumnIndex(COLUMN_NAME);
+                    int descriptionIndex = cursor.getColumnIndex(COLUMN_DESCRIPTION);
+                    int followedIndex = cursor.getColumnIndex(COLUMN_FOLLOWED);
+
+                    // Check if column indexes are valid
+                    if (idIndex >= 0 && nameIndex >= 0 && descriptionIndex >= 0 && followedIndex >= 0) {
+                        int id = cursor.getInt(idIndex);
+                        String name = cursor.getString(nameIndex);
+                        String description = cursor.getString(descriptionIndex);
+                        boolean followed = cursor.getInt(followedIndex) == 1;
+
+                        User user = new User(id, name, description, followed);
+                        userList.add(user);
+                    } else {
+                        Log.e("getUsers", "Invalid column index");
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        db.close();
+        return userList;
+    }
+
 }
